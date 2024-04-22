@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Admin Panel</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input {
+            margin-bottom: 10px;
+        }
+
+        button {
+            padding: 8px;
+            margin-top: 10px;
+        }
+
+        #question-list {
+            margin-top: 20px;
+        }
+
+        .question-item {
+            margin-bottom: 10px;
+        }
+
+        .question-item button {
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    
+    <div class="navbar responsive" id="myNavbar">
+        <a href="/quiz.html">Quiz</a>
+        <div class="dropdown">
+            <button class="dropbtn">Quiz Topic</button>
+            <div class="dropdown-content">
+                <a href="/mts_english_quiz.html">SSC MTS ENGLISH</a>
+                <a href="/mts_static_gk_quiz.html">SSC MTS STATIC GK</a>
+                <a href="#">SSC MTS VOCABULARY</a>
+            </div>
+        </div>
+        <a href="/updateNotes.html">Update Notes</a>
+        <a href="/about.html">About</a>
+        <a href="/admin_update_old.html">Admin Panel</a>
+    </div>
+    
+    <script>
+        // Toggle responsive navbar on small screens
+        function toggleNavbar() {
+            var x = document.getElementById("myNavbar");
+            if (x.className.indexOf("responsive") === -1) {
+                x.className += " responsive";
+            } else {
+                x.className = x.className.replace(" responsive", "");
+            }
+        }
+    </script>
+
+    
+    <h1>Quiz Admin Panel</h1>
+    <form id="quiz-form">
+        <label for="question">Question:</label>
+        <input type="text" id="question" required>
+        <label for="options">Options (comma-separated):</label>
+        <input type="text" id="options" required>
+        <label for="correct-answer">Correct Answer:</label>
+        <input type="text" id="correct-answer" required>
+        <button type="button" onclick="addQuestion()">Add Question</button>
+    </form>
+
+    <div id="question-list">
+        <h2>Question List</h2>
+        <ul id="questions"></ul>
+    </div>
+    <script>
+
+       function addQuestion() {
+    const questionInput = document.getElementById('question');
+    const optionsInput = document.getElementById('options');
+    const correctAnswerInput = document.getElementById('correct-answer');
+
+    const question = questionInput.value;
+    const options = optionsInput.value.split(',').map(option => option.trim());
+    const correctAnswer = correctAnswerInput.value;
+
+    if (question && options.length > 1 && options.includes(correctAnswer)) {
+        // Update the quizData array directly in quiz.js
+        quizData.push({ question, options, correctAnswer });
+
+        // Update the quiz.js file content
+        updateQuizFile(quizData);
+
+        // Clear form inputs
+        questionInput.value = '';
+        optionsInput.value = '';
+        correctAnswerInput.value = '';
+
+        // Update the question list
+        updateQuestionList();
+    } else {
+        alert('Please fill in all fields correctly.');
+    }
+}
+
+
+        function updateQuizFile(data) {
+            const quizJsContent = `const quizData = ${JSON.stringify(data, null, 2)};\n`;
+            const blob = new Blob([quizJsContent], { type: 'text/javascript' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'quiz.js';
+            link.click();
+        }
+
+        function deleteQuestion(index) {
+            const quizData = JSON.parse(localStorage.getItem('quizData')) || [];
+            quizData.splice(index, 1);
+            localStorage.setItem('quizData', JSON.stringify(quizData));
+            updateQuizFile(quizData);
+            updateQuestionList();
+        }
+
+        function updateQuestionList() {
+            const quizData = JSON.parse(localStorage.getItem('quizData')) || [];
+            const questionsContainer = document.getElementById('questions');
+
+            questionsContainer.innerHTML = '';
+            quizData.forEach((q, index) => {
+                const listItem = document.createElement('li');
+                listItem.className = 'question-item';
+                listItem.innerHTML = `<strong>${q.question}</strong> - Options: ${q.options.join(', ')} - Correct Answer: ${q.correctAnswer}
+                                     <button onclick="deleteQuestion(${index})">Delete</button>`;
+                questionsContainer.appendChild(listItem);
+            });
+        }
+
+        // Initial update of the question list
+        updateQuestionList();
+    </script>
+</body>
+</html>
