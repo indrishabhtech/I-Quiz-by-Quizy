@@ -1,4 +1,5 @@
 1- Now add more exams and more quiz data
+1.2- Add PYQs in pdf and word formate
 2 - Make some changes and pull quiz data from the database
 3- Make it interactive and add user poll , leaderboard using ajax or other modern approach
 4- User progress saved in their local and after singup into the database 
