@@ -103,6 +103,16 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
 
 <script>
+
+    // Asking for user name and class using prompt
+    var userName = prompt("Enter your name:");
+    var userClass = prompt("Enter your class:");
+
+    // Display the name and class on the certificate
+    document.getElementById("user-name").textContent = userName;
+    document.getElementById("user-class").textContent = userClass;
+
+
 const quizData = [
     {
         question: "What is the output of the following code?\n\n int main() {\n    int a = 5, b = 10;\n    printf(\"%d\", a++ + ++b);\n    return 0;\n }",
