@@ -5,6 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quiz</title>
     <style>
+/* Basic certificate styling */
+    
+.certificate {
+            width: 70%;
+            margin: 50px auto;
+            border: 5px solid black;
+            padding: 20px;
+            text-align: center;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .certificate-title {
+            font-size: 36px;
+            font-weight: bold;
+        }
+
+        .certificate-body {
+            margin-top: 20px;
+            font-size: 20px;
+        }
+        
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -56,7 +77,7 @@
     <div id="feedback"></div>
     <button id="next-btn" disabled onclick="nextQuestion()">Next Question</button>
 </div>
-
+<!---
 <div id="certificate-container">
     <h2>Certificate of Completion</h2>
     <p><strong>Congratulations <span id="user-name-cert">[Name]</span>!</strong></p>
@@ -65,7 +86,20 @@
     <p>Date: <span id="current-date-cert"></span></p>
     <button class="download-btn" onclick="downloadCertificate()">Download Certificate as PDF</button>
 </div>
+-->
 
+    <div class="certificate" id="certificate">
+    <div class="certificate-title">Certificate of Completion</div>
+    <div class="certificate-body">
+        <p>This is to certify that</p>
+        <h2 id="user-name">[Your Name]</h2>
+        <p>of class</p>
+        <h3 id="user-class">[Your Class]</h3>
+        <p>has successfully completed the quiz.</p>
+    </div>
+    </div>
+
+    
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
 
 <script>
