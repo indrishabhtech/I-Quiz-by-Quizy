@@ -72,6 +72,29 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
 
     <script>
+        let tabSwitchCount = 0;
+const maxTabSwitchesAllowed = 3; // set the max number of allowed tab switches
+
+document.addEventListener('visibilitychange', function () {
+    if (document.hidden) {
+        tabSwitchCount++;
+        alert("You switched tabs! Don't cheat! Warning " + tabSwitchCount + "/" + maxTabSwitchesAllowed);
+
+        // Optionally, end the quiz after a certain number of tab switches
+        if (tabSwitchCount >= maxTabSwitchesAllowed) {
+            endQuiz();
+        }
+    }
+});
+
+// Function to end the quiz if the user switches tabs too many times
+function endQuiz() {
+    alert("You have been disqualified for switching tabs too many times.");
+    document.getElementById('quiz-container').style.display = 'none';
+    // Add any additional code to prevent further interaction
+}
+
+        
         // Prevent navigation away from the quiz page (Restrict Navigation)
         window.onbeforeunload = function () {
             return "Are you sure you want to leave? Your progress will be lost!";
