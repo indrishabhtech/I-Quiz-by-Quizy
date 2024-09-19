@@ -91,9 +91,17 @@
             }
         }
 
-        // Asking for user name and class using prompt
-        var userName = prompt("Enter your name:");
-        var userClass = prompt("Enter your class:");
+function toUpperCase(str) {
+    return str.toUpperCase();
+}
+
+// Get user inputs and convert them to uppercase
+var userName = prompt("Enter your name:");
+var userClass = prompt("Enter your class:");
+
+userName = toUpperCase(userName);
+userClass = toUpperCase(userClass);
+
 
         // Placeholder values will be set after quiz completion
 
@@ -269,10 +277,11 @@
         <h2 id="user-name-cert">[Your Name]</h2>
         <p>of class</p>
         <h3 id="user-class-cert">[Your Class]</h3>
-        <p>has successfully completed the C Language quiz with a score of</p>
+        <p>has successfully completed the<b> C Language quiz </b> with a score of</p>
         <h2 id="final-score-cert">[Your Score]</h2>
-        <p>on</p>
-        <h4 id="current-date-cert">[Date]</h4>
+        <p>
+        <h4 id="current-date-cert">On [Date]</h4>
+        </p>
         <button class="download-btn" onclick="downloadCertificate()">Download Certificate</button>
     </div>
 </div>
