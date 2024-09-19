@@ -68,8 +68,189 @@
             margin-top: 20px;
         }
     </style>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+
+    <script>
+        // Prevent navigation away from the quiz page (Restrict Navigation)
+        window.onbeforeunload = function () {
+            return "Are you sure you want to leave? Your progress will be lost!";
+        };
+
+        // Function to check if the quiz has already been taken
+        function checkIfQuizTaken() {
+            if (localStorage.getItem('quiz_taken')) {
+                alert("You have already taken the quiz!");
+                document.getElementById('quiz-container').style.display = 'none';
+                document.getElementById('certificate-container').style.display = 'block';
+                // Show stored certificate details
+                document.getElementById('user-name-cert').textContent = localStorage.getItem('user_name');
+                document.getElementById('user-class-cert').textContent = localStorage.getItem('user_class');
+                document.getElementById('final-score-cert').textContent = localStorage.getItem('user_score');
+                document.getElementById('current-date-cert').textContent = localStorage.getItem('user_date');
+            }
+        }
+
+        // Asking for user name and class using prompt
+        var userName = prompt("Enter your name:");
+        var userClass = prompt("Enter your class:");
+
+        // Placeholder values will be set after quiz completion
+
+        const quizData = [
+            {
+                question: "What is the output of the following code?\n\n int main() {\n    int a = 5, b = 10;\n    printf(\"%d\", a++ + ++b);\n    return 0;\n }",
+                options: ["16", "17", "15", "11"],
+                correctAnswer: "16"
+            },
+            {
+                question: "What is the purpose of the 'volatile' keyword in C?",
+                options: [
+                    "Optimize variable usage",
+                    "Prevent optimization of variables",
+                    "Access global variables",
+                    "Force inlining of functions"
+                ],
+                correctAnswer: "Prevent optimization of variables"
+            },
+            // More quiz questions...
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        let totalSecondsRemaining = 1200;
+        let secondsRemaining = 30;
+        let totalQuizTimer;
+        let questionTimer;
+
+        function startQuiz() {
+            startTotalTimer();
+            showQuestion();
+        }
+
+        function startTotalTimer() {
+            totalQuizTimer = setInterval(updateTotalTimer, 1000);
+        }
+
+        function updateTotalTimer() {
+            const totalTimerElement = document.getElementById('total-timer');
+            if (totalSecondsRemaining > 0) {
+                totalSecondsRemaining--;
+                const minutes = Math.floor(totalSecondsRemaining / 60);
+                const seconds = totalSecondsRemaining % 60;
+                totalTimerElement.textContent = `Total Time Remaining: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+            } else {
+                clearInterval(totalQuizTimer);
+                totalTimerElement.textContent = 'Total Time Expired!';
+                endQuiz();
+            }
+        }
+
+        function startQuestionTimer() {
+            questionTimer = setInterval(updateQuestionTimer, 1000);
+        }
+
+        function updateQuestionTimer() {
+            const timerElement = document.getElementById('question-timer');
+            if (secondsRemaining > 0) {
+                secondsRemaining--;
+                timerElement.textContent = `Question Time Remaining: ${secondsRemaining} seconds`;
+            } else {
+                clearInterval(questionTimer);
+                timerElement.textContent = 'Time Expired!';
+                handleTimeExpired();
+            }
+        }
+
+        function showQuestion() {
+            const questionContainer = document.getElementById('question-container');
+            const optionsContainer = document.getElementById('options-container');
+            const feedback = document.getElementById('feedback');
+
+            secondsRemaining = 20;
+            startQuestionTimer();
+
+            questionContainer.innerHTML = quizData[currentQuestion].question;
+            optionsContainer.innerHTML = '';
+
+            quizData[currentQuestion].options.forEach((option) => {
+                const button = document.createElement('button');
+                button.textContent = option;
+                button.onclick = () => checkAnswer(option);
+                optionsContainer.appendChild(button);
+
+                if (option === quizData[currentQuestion].correctAnswer) {
+                    button.dataset.correct = true;
+                }
+            });
+
+            feedback.textContent = '';
+        }
+
+        function checkAnswer(selectedOption) {
+            clearInterval(questionTimer);
+
+            const optionsContainer = document.getElementById('options-container');
+            const options = optionsContainer.getElementsByTagName('button');
+
+            for (const optionButton of options) {
+                optionButton.disabled = true;
+                if (optionButton.textContent === selectedOption) {
+                    if (selectedOption !== quizData[currentQuestion].correctAnswer) {
+                        optionButton.style.backgroundColor = '#e32929';
+                    }
+                }
+                if (optionButton.textContent === quizData[currentQuestion].correctAnswer) {
+                    optionButton.style.backgroundColor = '#4cd95a';
+                }
+            }
+
+            if (selectedOption === quizData[currentQuestion].correctAnswer) {
+                score++;
+                document.getElementById('feedback').textContent = 'Correct!';
+            } else {
+                document.getElementById('feedback').textContent = 'Incorrect!';
+            }
+
+            document.getElementById('next-btn').disabled = false;
+        }
+
+        function nextQuestion() {
+            currentQuestion++;
+            if (currentQuestion < quizData.length) {
+                showQuestion();
+                document.getElementById('next-btn').disabled = true;
+            } else {
+                endQuiz();
+            }
+        }
+
+        function endQuiz() {
+            document.getElementById('quiz-container').style.display = 'none';
+            document.getElementById('certificate-container').style.display = 'block';
+
+            // Store user details in localStorage to prevent retake
+            localStorage.setItem('quiz_taken', true);
+            localStorage.setItem('user_name', userName);
+            localStorage.setItem('user_class', userClass);
+            localStorage.setItem('user_score', score);
+            localStorage.setItem('user_date', new Date().toLocaleDateString());
+
+            // Display user details on the certificate
+            document.getElementById('user-name-cert').textContent = userName;
+            document.getElementById('user-class-cert').textContent = userClass;
+            document.getElementById('final-score-cert').textContent = score;
+            document.getElementById('current-date-cert').textContent = new Date().toLocaleDateString();
+        }
+
+        function downloadCertificate() {
+            const certificate = document.getElementById('certificate-container');
+            html2pdf().from(certificate).save('certificate.pdf');
+        }
+
+    </script>
 </head>
-<body>
+<body onload="checkIfQuizTaken()">
 
 <div id="quiz-container">
     <h1>Quiz</h1>
@@ -88,168 +269,15 @@
         <h2 id="user-name-cert">[Your Name]</h2>
         <p>of class</p>
         <h3 id="user-class-cert">[Your Class]</h3>
-        <p>You have successfully completed the C language quiz.</p>
-        <p>Your score is: <span id="final-score-cert">[Score]</span></p>
-        <p>   Out of : 30 </p>
-        <p>Date: <span id="current-date-cert"></span></p>
-        <button class="download-btn" onclick="downloadCertificate()">Download Certificate as PDF</button>
+        <p>has successfully completed the C Language quiz with a score of</p>
+        <h2 id="final-score-cert">[Your Score]</h2>
+        <p>on</p>
+        <h4 id="current-date-cert">[Date]</h4>
+        <button class="download-btn" onclick="downloadCertificate()">Download Certificate</button>
     </div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
-
 <script>
-    // Asking for user name and class using prompt
-    var userName = prompt("Enter your name:");
-    var userClass = prompt("Enter your class:");
-
-    // Placeholder values will be set after quiz completion
-
-    const quizData = [
-        {
-            question: "What is the output of the following code?\n\n int main() {\n    int a = 5, b = 10;\n    printf(\"%d\", a++ + ++b);\n    return 0;\n }",
-            options: ["16", "17", "15", "11"],
-            correctAnswer: "16"
-        },
-        {
-            question: "What is the purpose of the 'volatile' keyword in C?",
-            options: [
-                "Optimize variable usage",
-                "Prevent optimization of variables",
-                "Access global variables",
-                "Force inlining of functions"
-            ],
-            correctAnswer: "Prevent optimization of variables"
-        },
-        // More quiz questions...
-    ];
-
-    let currentQuestion = 0;
-    let score = 0;
-    let totalSecondsRemaining = 1200;
-    let secondsRemaining = 30;
-    let totalQuizTimer;
-    let questionTimer;
-
-    function startQuiz() {
-        startTotalTimer();
-        showQuestion();
-    }
-
-    function startTotalTimer() {
-        totalQuizTimer = setInterval(updateTotalTimer, 1000);
-    }
-
-    function updateTotalTimer() {
-        const totalTimerElement = document.getElementById('total-timer');
-        if (totalSecondsRemaining > 0) {
-            totalSecondsRemaining--;
-            const minutes = Math.floor(totalSecondsRemaining / 60);
-            const seconds = totalSecondsRemaining % 60;
-            totalTimerElement.textContent = `Total Time Remaining: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-        } else {
-            clearInterval(totalQuizTimer);
-            totalTimerElement.textContent = 'Total Time Expired!';
-            endQuiz();
-        }
-    }
-
-    function startQuestionTimer() {
-        questionTimer = setInterval(updateQuestionTimer, 1000);
-    }
-
-    function updateQuestionTimer() {
-        const timerElement = document.getElementById('question-timer');
-        if (secondsRemaining > 0) {
-            secondsRemaining--;
-            timerElement.textContent = `Question Time Remaining: ${secondsRemaining} seconds`;
-        } else {
-            clearInterval(questionTimer);
-            timerElement.textContent = 'Time Expired!';
-            handleTimeExpired();
-        }
-    }
-
-    function showQuestion() {
-        const questionContainer = document.getElementById('question-container');
-        const optionsContainer = document.getElementById('options-container');
-        const feedback = document.getElementById('feedback');
-
-        secondsRemaining = 20;
-        startQuestionTimer();
-
-        questionContainer.innerHTML = quizData[currentQuestion].question;
-        optionsContainer.innerHTML = '';
-
-        quizData[currentQuestion].options.forEach((option) => {
-            const button = document.createElement('button');
-            button.textContent = option;
-            button.onclick = () => checkAnswer(option);
-            optionsContainer.appendChild(button);
-
-            if (option === quizData[currentQuestion].correctAnswer) {
-                button.dataset.correct = true;
-            }
-        });
-
-        feedback.textContent = '';
-    }
-
-    function checkAnswer(selectedOption) {
-        clearInterval(questionTimer);
-
-        const optionsContainer = document.getElementById('options-container');
-        const options = optionsContainer.getElementsByTagName('button');
-
-        for (const optionButton of options) {
-            optionButton.disabled = true;
-            if (optionButton.textContent === selectedOption) {
-                if (selectedOption !== quizData[currentQuestion].correctAnswer) {
-                    optionButton.style.backgroundColor = '#e32929';
-                }
-            }
-            if (optionButton.textContent === quizData[currentQuestion].correctAnswer) {
-                optionButton.style.backgroundColor = '#4cd95a';
-            }
-        }
-
-        if (selectedOption === quizData[currentQuestion].correctAnswer) {
-            score++;
-            document.getElementById('feedback').textContent = 'Correct!';
-        } else {
-            document.getElementById('feedback').textContent = 'Incorrect!';
-        }
-
-        document.getElementById('next-btn').disabled = false;
-    }
-
-    function nextQuestion() {
-        currentQuestion++;
-        if (currentQuestion < quizData.length) {
-            showQuestion();
-            document.getElementById('next-btn').disabled = true;
-        } else {
-            endQuiz();
-        }
-    }
-
-    function endQuiz() {
-        document.getElementById('quiz-container').style.display = 'none';
-        document.getElementById('certificate-container').style.display = 'block';
-
-        // Display user details on the certificate
-        document.getElementById('user-name-cert').textContent = userName;
-        document.getElementById('user-class-cert').textContent = userClass;
-        document.getElementById('final-score-cert').textContent = score;
-        document.getElementById('current-date-cert').textContent = new Date().toLocaleDateString();
-    }
-
-    function downloadCertificate() {
-        const certificate = document.getElementById('certificate-container');
-        html2pdf().from(certificate).save('certificate.pdf');
-    }
-
-    // Initialize quiz
     startQuiz();
 </script>
 
