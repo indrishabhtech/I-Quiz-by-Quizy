@@ -4,8 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>C Language Quiz</title>
-    
-      <style>
+       <style>
         /* Basic certificate styling */
         .certificate {
             width: 70%;
@@ -83,7 +82,6 @@
 
     <script>
 
-    // Fix: Correct placement of variables and execution of functions
     let userName = prompt("Enter your name:");
     let userClass = prompt("Enter your class:");
 
@@ -94,6 +92,22 @@
 
     userName = toUpperCase(userName);
     userClass = toUpperCase(userClass);
+
+    // Check if the quiz has already been taken
+    function checkIfQuizTaken() {
+        const storedName = localStorage.getItem('user_name');
+        if (storedName) {
+            alert(`Hello ${storedName}, you have already taken the quiz. Check back later for new quizzes.`);
+            document.getElementById('quiz-container').style.display = 'none';
+            document.getElementById('certificate-container').style.display = 'block';
+
+            // Load the certificate details
+            document.getElementById('user-name-cert').textContent = localStorage.getItem('user_name');
+            document.getElementById('user-class-cert').textContent = localStorage.getItem('user_class');
+            document.getElementById('final-score-cert').textContent = `Your Score: ${localStorage.getItem('user_score')} / ${quizData.length}`;
+            document.getElementById('current-date-cert').textContent = `Date: ${localStorage.getItem('user_date')}`;
+        }
+    }
 
     // Function to add and update dynamic watermark
     function addWatermark() {
@@ -142,23 +156,8 @@
         return "Are you sure you want to leave? Your progress will be lost!";
     };
 
-    // Function to check if the quiz has already been taken
-    function checkIfQuizTaken() {
-        if (localStorage.getItem('quiz_taken')) {
-            alert("You have already taken the quiz!");
-            document.getElementById('quiz-container').style.display = 'none';
-            document.getElementById('certificate-container').style.display = 'block';
-            // Show stored certificate details
-            document.getElementById('user-name-cert').textContent = localStorage.getItem('user_name');
-            document.getElementById('user-class-cert').textContent = localStorage.getItem('user_class');
-            document.getElementById('final-score-cert').textContent = localStorage.getItem('user_score');
-            document.getElementById('current-date-cert').textContent = localStorage.getItem('user_date');
-        }
-    }
-
     // Quiz data
     const quizData = [
-        // (Quiz questions and answers go here)
         {
             question: "What is the output of the following code?\n\n int main() {\n    int a = 5, b = 10;\n    printf(\"%d\", a++ + ++b);\n    return 0;\n }",
             options: ["16", "17", "15", "11"],
@@ -273,6 +272,12 @@
         localStorage.setItem('user_class', userClass);
         localStorage.setItem('user_score', score);
         localStorage.setItem('user_date', new Date().toLocaleDateString());
+
+        // Show the saved certificate details
+        document.getElementById('user-name-cert').textContent = userName;
+        document.getElementById('user-class-cert').textContent = userClass;
+        document.getElementById('final-score-cert').textContent = `Your Score: ${score} / ${quizData.length}`;
+        document.getElementById('current-date-cert').textContent = `Date: ${new Date().toLocaleDateString()}`;
     }
 
     </script>
@@ -289,7 +294,7 @@
         <button onclick="startQuiz()">Start Quiz</button>
     </div>
 
-    <div id="certificate-container">
+    <div id="certificate-container" style="display: none;">
         <h1>Certificate of Completion</h1>
         <p id="user-name-cert"></p>
         <p id="user-class-cert"></p>
@@ -300,13 +305,11 @@
 
     <script>
     function downloadCertificate() {
-        const certificate = document.getElementById('certificate-container');
+        var certificateElement = document.getElementById('certificate-container');
         html2pdf()
-            .from(certificate)
+            .from(certificateElement)
             .save('certificate.pdf');
     }
     </script>
-
 </body>
-            </html>
-                
+</html>
