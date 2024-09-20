@@ -67,11 +67,50 @@
             cursor: pointer;
             margin-top: 20px;
         }
+
+        /* Dynamic Watermark Styling */
+        .watermark {
+            position: fixed;
+            font-size: 24px;
+            color: rgba(255, 0, 0, 0.3);
+            z-index: 1000;
+            pointer-events: none;
+            user-select: none;
+        }
     </style>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
 
     <script>
+
+
+
+    // Function to add and update dynamic watermark
+    function addWatermark() {
+        const watermarkElement = document.getElementById('watermark');
+
+        // Randomize position of watermark
+        const randomX = Math.floor(Math.random() * (window.innerWidth - 100)) + 'px';
+        const randomY = Math.floor(Math.random() * (window.innerHeight - 50)) + 'px';
+
+        // Update watermark content and position
+        const timestamp = new Date().toLocaleTimeString();
+        watermarkElement.textContent = `${userName} - "Hello" + ${timestamp}`;
+        watermarkElement.style.left = randomX;
+        watermarkElement.style.top = randomY;
+    }
+
+    // Call the watermark function immediately
+    addWatermark();
+
+    // Update watermark every 10 seconds
+    setInterval(addWatermark, 10000);  // 10000 ms = 10 seconds
+
+
+
+
+
+        
         let tabSwitchCount = 0;
 const maxTabSwitchesAllowed = 2; // set the max number of allowed tab switches
 
@@ -548,6 +587,10 @@ userClass = toUpperCase(userClass);
     <button id="next-btn" disabled onclick="nextQuestion()">Next Question</button>
 </div>
 
+    <!-- Watermark for no cheating-->
+<div id="watermark" class="watermark"></div>
+
+    
 <div id="certificate-container">
     <div class="certificate-title">Certificate of Completion</div>
     <div class="certificate-body">
