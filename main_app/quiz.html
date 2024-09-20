@@ -73,14 +73,14 @@
 
     <script>
         let tabSwitchCount = 0;
-const maxTabSwitchesAllowed = 3; // set the max number of allowed tab switches
+const maxTabSwitchesAllowed = 2; // set the max number of allowed tab switches
 
 document.addEventListener('visibilitychange', function () {
     if (document.hidden) {
         tabSwitchCount++;
         alert("You switched tabs! Don't cheat! Warning " + tabSwitchCount + "/" + maxTabSwitchesAllowed);
 
-        // Optionally, end the quiz after a certain number of tab switches
+        // Optionally, end the quiz after the defined number of tab switches
         if (tabSwitchCount >= maxTabSwitchesAllowed) {
             endQuiz();
         }
@@ -91,7 +91,7 @@ document.addEventListener('visibilitychange', function () {
 function endQuiz() {
     alert("You have been disqualified for switching tabs too many times.");
     document.getElementById('quiz-container').style.display = 'none';
-    // Add any additional code to prevent further interaction
+    // Adding here any additional code to prevent further interaction
 }
 
         
@@ -453,7 +453,7 @@ userClass = toUpperCase(userClass);
             const optionsContainer = document.getElementById('options-container');
             const feedback = document.getElementById('feedback');
 
-            secondsRemaining = 20;
+            secondsRemaining = 40;
             startQuestionTimer();
 
             questionContainer.innerHTML = quizData[currentQuestion].question;
@@ -531,7 +531,7 @@ userClass = toUpperCase(userClass);
 
         function downloadCertificate() {
             const certificate = document.getElementById('certificate-container');
-            html2pdf().from(certificate).save('certificate.pdf');
+            html2pdf().from(certificate).save('Quiz-certificate.pdf');
         }
 
     </script>
