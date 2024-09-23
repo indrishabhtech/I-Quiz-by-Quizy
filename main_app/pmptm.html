@@ -1,1 +1,223 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C Programming Test - Answer Key</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f9f9f9;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .question {
+            margin-bottom: 30px;
+        }
+        .question h3 {
+            margin: 0;
+            color: #00796b;
+        }
+        .answer {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #e0f7fa;
+            border-left: 4px solid #00796b;
+        }
+        .code-block {
+            background-color: #f0f0f0;
+            padding: 10px;
+            border: 1px solid #ddd;
+            margin-top: 10px;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        pre {
+            background-color: #f0f0f0;
+            padding: 10px;
+            border: 1px solid #ddd;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>C Programming Test - Answer Key</h1>
+
+        <!-- Question 1 -->
+        <div class="question">
+            <h3>1. What is an array? Give an example with printing an array (5 marks)</h3>
+            <div class="answer">
+                An <strong>array</strong> is a collection of elements, all of the same type, stored in contiguous memory locations. Arrays allow indexed access, where each element can be referenced using its position in the array (starting at index 0). This makes it easy to store and access multiple values.
+                <br><br>
+                <strong>Example Code:</strong>
+                <pre><code>#include &lt;stdio.h&gt;
+int main() {
+    int arr[5] = {1, 2, 3, 4, 5};
+    for (int i = 0; i < 5; i++) {
+        printf("%d ", arr[i]);
+    }
+    return 0;
+}</code></pre>
+                Output: 1 2 3 4 5
+            </div>
+        </div>
+
+        <!-- Question 2 -->
+        <div class="question">
+            <h3>2. Write any sorting algorithm steps with an example (5 marks)</h3>
+            <div class="answer">
+                <strong>Bubble Sort</strong> is one of the simplest sorting algorithms. It works by repeatedly swapping adjacent elements if they are in the wrong order. The process is repeated until the array is sorted.
+                <br><br>
+                <strong>Steps:</strong>
+                <ul>
+                    <li>Compare the first two elements.</li>
+                    <li>Swap them if the first is larger than the second.</li>
+                    <li>Move to the next element and repeat until the end of the array.</li>
+                    <li>Repeat the entire process until no swaps are needed.</li>
+                </ul>
+                <strong>Example Code:</strong>
+                <pre><code>#include &lt;stdio.h&gt;
+void bubbleSort(int arr[], int n) {
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = 0; j < n - i - 1; j++) {
+            if (arr[j] > arr[j + 1]) {
+                int temp = arr[j];
+                arr[j] = arr[j + 1];
+                arr[j + 1] = temp;
+            }
+        }
+    }
+}</code></pre>
+            </div>
+        </div>
+
+        <!-- Question 3 -->
+        <div class="question">
+            <h3>3. Write counting from 1-20 using while, do-while, and for loop (10 marks)</h3>
+            <div class="answer">
+                To count from 1 to 20, the <strong>while</strong>, <strong>do-while</strong>, and <strong>for</strong> loops can be used.
+                <br><br>
+                <strong>While Loop:</strong>
+                <pre><code>#include &lt;stdio.h&gt;
+int main() {
+    int i = 1;
+    while (i <= 20) {
+        printf("%d ", i);
+        i++;
+    }
+    return 0;
+}</code></pre>
+                <strong>Do-While Loop:</strong>
+                <pre><code>#include &lt;stdio.h&gt;
+int main() {
+    int i = 1;
+    do {
+        printf("%d ", i);
+        i++;
+    } while (i <= 20);
+    return 0;
+}</code></pre>
+                <strong>For Loop:</strong>
+                <pre><code>#include &lt;stdio.h&gt;
+int main() {
+    for (int i = 1; i <= 20; i++) {
+        printf("%d ", i);
+    }
+    return 0;
+}</code></pre>
+            </div>
+        </div>
+
+        <!-- Question 4 -->
+        <div class="question">
+            <h3>4. What is a pointer? Write the syntax of malloc() (5 marks)</h3>
+            <div class="answer">
+                A <strong>pointer</strong> is a variable that stores the memory address of another variable. Pointers are essential for dynamic memory allocation.
+                <br><br>
+                <strong>Syntax of malloc():</strong>
+                <pre><code>ptr = (castType*) malloc(size_in_bytes);</code></pre>
+                <strong>Example:</strong>
+                <pre><code>int* ptr = (int*) malloc(5 * sizeof(int));</code></pre>
+            </div>
+        </div>
+
+        <!-- Question 5 -->
+        <div class="question">
+            <h3>5. Get the sum of these two numbers (15 and 10) using a function (5 marks)</h3>
+            <div class="answer">
+                In this task, we create a function that takes two integers as input and returns their sum.
+                <br><br>
+                <strong>Example Code:</strong>
+                <pre><code>#include &lt;stdio.h&gt;
+int getSum(int a, int b) {
+    return a + b;
+}
+int main() {
+    int a = 15, b = 10;
+    int sum = getSum(a, b);
+    printf("Sum: %d", sum);
+    return 0;
+}</code></pre>
+            </div>
+        </div>
+
+        <!-- Question 6 -->
+        <div class="question">
+            <h3>6. What is a string? Write a program to reverse a string given in the input (10 marks)</h3>
+            <div class="answer">
+                A <strong>string</strong> in C is a sequence of characters terminated by a null character (<code>'\0'</code>).
+                <br><br>
+                <strong>Example Code to Reverse a String:</strong>
+                <pre><code>#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+int main() {
+    char str[100], rev[100];
+    int len, i, j;
+    
+    printf("Enter a string: ");
+    gets(str);
+    
+    len = strlen(str);
+    
+    for (i = len - 1, j = 0; i >= 0; i--, j++) {
+        rev[j] = str[i];
+    }
+    rev[j] = '\0';
+    
+    printf("Reversed string: %s", rev);
+    return 0;
+}</code></pre>
+            </div>
+        </div>
+
+        <!-- Question 7 -->
+        <div class="question">
+            <h3>7. Write the 5 differences between if-else and switch (10 marks)</h3>
+            <div class="answer">
+                <ul>
+                    <li><strong>Syntax:</strong> <code>if-else</code> uses conditions; <code>switch</code> uses cases for a single expression.</li>
+                    <li><strong>Data Types:</strong> <code>if-else</code> supports various data types; <code>switch</code> is limited to integers and characters.</li>
+                    <li><strong>Performance:</strong> <code>switch</code> is faster for multiple conditions due to jump tables; <code>if-else</code> evaluates sequentially.</li>
+                    <li><strong>Range Checking:</strong> <code>if-else</code> handles complex conditions; <code>switch</code> is for exact value matching.</li>
+                    <li><strong>Readability:</strong> <code>switch</code> offers clearer structure for single-variable conditions; <code>if-else</code> is more flexible but less readable for many conditions.</li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+  </html>
+  
