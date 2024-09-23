@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>C Programming Test - Answer Key</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -218,6 +220,37 @@ int main() {
 
     </div>
 
+
+
+    <button onclick="downloadPDF()">Download PDF</button>
+
+    <script>
+        function downloadPDF() {
+            // Import jsPDF
+            const { jsPDF } = window.jspdf;
+
+            // Create a new jsPDF instance
+            const doc = new jsPDF();
+
+            // Get the content of the page you want to include in the PDF
+            const content = document.getElementById("content").innerHTML;
+
+            // Add the content to the PDF (use HTML function to render HTML content)
+            doc.html(content, {
+                callback: function (doc) {
+                    // Save the PDF
+                    doc.save('C_Test_Answer_Key.pdf');
+                },
+                x: 10,
+                y: 10,
+                width: 180, // Adjust width according to your page layout
+                windowWidth: 800 // Width of the window context
+            });
+        }
+    </script>
+
+    
+    
 </body>
   </html>
   
