@@ -223,7 +223,7 @@ int main() {
                 <ul>
                     <li><strong>Syntax:</strong> <code>if-else</code> uses conditions; <code>switch</code> uses cases for a single expression.</li>
                     <li><strong>Data Types:</strong> <code>if-else</code> supports various data types; <code>switch</code> is limited to integers and characters.</li>
-                    <li><strong>Performance:</strong> <code>switch</code> is faster for multiple conditions compared to <code>if-else</code>.</li>
+                    <li><strong>Execution:</strong> <code>switch</code> is more efficient when comparing multiple values compared to <code>if-else</code>.</li>
                     <li><strong>Readability:</strong> <code>switch</code> is more readable when dealing with multiple conditions.</li>
                     <li><strong>Use Cases:</strong> <code>if-else</code> is used for complex conditions; <code>switch</code> is preferred when comparing a single variable.</li>
                 </ul>
@@ -240,19 +240,34 @@ int main() {
             const doc = new jsPDF();
 
             doc.text("C Programming Test - Answer Key", 10, 10);
-            
+
             let questions = document.querySelectorAll(".question");
             let y = 20;
+            let pageHeight = doc.internal.pageSize.height;
+            let lineHeight = 10;
 
             questions.forEach((question, index) => {
                 let questionText = question.querySelector("h3").innerText;
                 let answerText = question.querySelector(".answer").innerText;
 
-                doc.text(questionText, 10, y);
-                y += 10;
-                doc.text(answerText, 10, y, { maxWidth: 180 });
+                let splitQuestion = doc.splitTextToSize(questionText, 180);
+                let splitAnswer = doc.splitTextToSize(answerText, 180);
 
-                y += 30;
+                // Add question
+                if (y + (splitQuestion.length * lineHeight) > pageHeight - 20) {
+                    doc.addPage();
+                    y = 20;
+                }
+                doc.text(splitQuestion, 10, y);
+                y += splitQuestion.length * lineHeight + 5;
+
+                // Add answer
+                if (y + (splitAnswer.length * lineHeight) > pageHeight - 20) {
+                    doc.addPage();
+                    y = 20;
+                }
+                doc.text(splitAnswer, 10, y);
+                y += splitAnswer.length * lineHeight + 10;
             });
 
             doc.save("C_Programming_Test_Answer_Key.pdf");
