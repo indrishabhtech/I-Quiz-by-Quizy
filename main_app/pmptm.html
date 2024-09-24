@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -67,7 +65,7 @@
 </head>
 <body>
 
-    <div id="content" class="container">
+    <div class="container" id="content">
         <h1>C Programming Test - Answer Key</h1>
 
         <!-- Question 1 -->
@@ -95,6 +93,13 @@ int main() {
             <div class="answer">
                 <strong>Bubble Sort</strong> is one of the simplest sorting algorithms. It works by repeatedly swapping adjacent elements if they are in the wrong order. The process is repeated until the array is sorted.
                 <br><br>
+                <strong>Steps:</strong>
+                <ul>
+                    <li>Compare the first two elements.</li>
+                    <li>Swap them if the first is larger than the second.</li>
+                    <li>Move to the next element and repeat until the end of the array.</li>
+                    <li>Repeat the entire process until no swaps are needed.</li>
+                </ul>
                 <strong>Example Code:</strong>
                 <pre><code>#include &lt;stdio.h&gt;
 void bubbleSort(int arr[], int n) {
@@ -110,53 +115,6 @@ void bubbleSort(int arr[], int n) {
 }</code></pre>
             </div>
         </div>
-<!-- Question 3 -->
-        <div class="question">
-            <h3>3. Write counting from 1-20 using while, do-while, and for loop (10 marks)</h3>
-            <div class="answer">
-                To count from 1 to 20, the <strong>while</strong>, <strong>do-while</strong>, and <strong>for</strong> loops can be used.
-                <br><br>
-                <strong>While Loop:</strong>
-                <pre><code>#include &lt;stdio.h&gt;
-int main() {
-    int i = 1;
-    while (i <= 20) {
-        printf("%d ", i);
-        i++;
-    }
-    return 0;
-}</code></pre>
-                <strong>Do-While Loop:</strong>
-                <pre><code>#include &lt;stdio.h&gt;
-int main() {
-    int i = 1;
-    do {
-        printf("%d ", i);
-        i++;
-    } while (i <= 20);
-    return 0;
-}</code></pre>
-                <strong>For Loop:</strong>
-                <pre><code>#include &lt;stdio.h&gt;
-int main() {
-    for (int i = 1; i <= 20; i++) {
-        printf("%d ", i);
-    }
-    return 0;
-}</code></pre>
-            </div>
-        </div>
-
-        <!-- Question 4 -->
-        <div class="question">
-            <h3>4. What is a pointer? Write the syntax of malloc() (5 marks)</h3>
-            <div class="answer">
-                A <strong>pointer</strong> is a variable that stores the memory address of another variable. Pointers are essential for dynamic memory allocation.
-                
-
-
-
-        
 
         <!-- Question 3 -->
         <div class="question">
@@ -228,7 +186,7 @@ int main() {
             </div>
         </div>
 
-                        <!-- Question 6 -->
+        <!-- Question 6 -->
         <div class="question">
             <h3>6. What is a string? Write a program to reverse a string given in the input (10 marks)</h3>
             <div class="answer">
@@ -265,49 +223,41 @@ int main() {
                 <ul>
                     <li><strong>Syntax:</strong> <code>if-else</code> uses conditions; <code>switch</code> uses cases for a single expression.</li>
                     <li><strong>Data Types:</strong> <code>if-else</code> supports various data types; <code>switch</code> is limited to integers and characters.</li>
-                    <li><strong>Performance:</strong> <code>switch</code> is faster for multiple conditions due to jump tables; <code>if-else</code> evaluates sequentially.</li>
-                    <li><strong>Range Checking:</strong> <code>if-else</code> handles complex conditions; <code>switch</code> is for exact value matching.</li>
-                    <li><strong>Readability:</strong> <code>switch</code> offers clearer structure for single-variable conditions; <code>if-else</code> is more flexible but less readable for many conditions.</li>
+                    <li><strong>Performance:</strong> <code>switch</code> is faster for multiple conditions compared to <code>if-else</code>.</li>
+                    <li><strong>Readability:</strong> <code>switch</code> is more readable when dealing with multiple conditions.</li>
+                    <li><strong>Use Cases:</strong> <code>if-else</code> is used for complex conditions; <code>switch</code> is preferred when comparing a single variable.</li>
                 </ul>
             </div>
         </div>
-
     </div>
 
-        <!-- Add remaining questions here -->
-        <!-- For brevity, I'm skipping the remaining questions -->
-
-    </div>
-
+    <!-- Download Button -->
     <button onclick="downloadPDF()">Download PDF</button>
 
     <script>
         function downloadPDF() {
-            // Import jsPDF
             const { jsPDF } = window.jspdf;
-
-            // Create a new jsPDF instance
             const doc = new jsPDF();
 
-            // Get the content of the page you want to include in the PDF
-            const content = document.getElementById("content");
+            doc.text("C Programming Test - Answer Key", 10, 10);
+            
+            let questions = document.querySelectorAll(".question");
+            let y = 20;
 
-            // Add the content to the PDF (use HTML function to render HTML content)
-            doc.html(content, {
-                callback: function (doc) {
-                    // Save the PDF
-                    doc.save('C_Test_Answer_Key.pdf');
-                },
-                x: 10,
-                y: 10,
-                width: 180, // Adjust width according to your page layout
-                windowWidth: 800 // Width of the window context
+            questions.forEach((question, index) => {
+                let questionText = question.querySelector("h3").innerText;
+                let answerText = question.querySelector(".answer").innerText;
+
+                doc.text(questionText, 10, y);
+                y += 10;
+                doc.text(answerText, 10, y, { maxWidth: 180 });
+
+                y += 30;
             });
+
+            doc.save("C_Programming_Test_Answer_Key.pdf");
         }
     </script>
-    
+
 </body>
 </html>
-
-
-
